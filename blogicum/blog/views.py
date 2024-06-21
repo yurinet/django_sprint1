@@ -44,25 +44,20 @@ posts = [
     },
 ]
 
-posts_dict = {post["id"]: position for position, post in enumerate(posts)}
+POSTS_DICT = {post["id"]: post for post in posts}
 
 
 def index(request: HttpRequest) -> HttpResponse:
-    template = 'blog/index.html'
-    context = {'posts': posts}
-    return render(request, template, context)
+    return render(request, 'blog/index.html', {'posts': posts})
 
 
 def post_detail(request: HttpRequest, id: int) -> HttpResponse:
-    template = "blog/detail.html"
-    post_index = posts_dict.get(id)
-    if post_index is None:
+    post = POSTS_DICT.get(id)
+    if post is None:
         raise Http404('Page not found (404). Пост не найден.')
-    context = {"post": posts[post_index]}
-    return render(request, template, context)
+    return render(request, "blog/detail.html", {"post": post})
 
 
 def category_posts(request: HttpRequest, category_slug: str) -> HttpResponse:
-    template = 'blog/category.html'
-    context = {'slug': category_slug}
-    return render(request, template, context)
+    # context = {'slug': category_slug}
+    return render(request, 'blog/category.html', {'slug': category_slug})
